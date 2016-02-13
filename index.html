@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app" ng-controller='FriendController'>
 <head>
   <title>Angular Friends</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -14,26 +14,19 @@
     <form class="form-inline searchForm" role="form">
       <div class="form-group">
 
-        <input class="form-control" placeholder="Search Anything About Your Friends">
-        <!-- STEP 5: Get rid of the one above when you uncomment the below-->
-          <!--
-        <input class="form-control" placeholder="Search Name">
-        <input class="form-control" placeholder="Search Location">
-          -->
+        <input class="form-control" placeholder="Search Name" ng-model="searchTerm.name">
+        <input class="form-control" placeholder="Search Location" ng-model="searchTerm.current_location.$">
 
-        <select class="input-medium">
-          <option>Name</option>
-          <option>#Friends</option>
-          <option>City</option>
-          <option>State</option>
-          <option>Country</option>
-        </select>
-
-        <select class="input-medium">
-          <option value="+">Descending</option>
-          <option value="-">Ascending</option>
-        </select>
-
+        <div>
+          <select class="input-medium" ng-model="sortBy">
+            <option value="name">Name</option>
+            <option value="friend_count">#Friends</option>
+            <option value="current_location.city">City</option>
+            <option value="current_location.state">State</option>
+            <option value="current_location.country">Country</option>
+          </select>
+          <select class="input-medium" ng-model="isReversed" ng-options="option.name for option in order"></select>
+        </div>
       </div>
     </form>
 
@@ -55,6 +48,20 @@
           Friends: 1,367
         </div>
       </li>
+
+      <li class='friend' ng-repeat="friend in friends | filter: searchTerm | orderBy:sortBy:isReversed.value">
+        <img class="profile-pic" src={{friend.pic_square}} alt="" />
+        <h3>{{friend.name}}</h3>
+        <div class="location">
+          Location: {{friend.current_location.name}} {{friend.current_location.country}}
+        </div>
+        <div class="status">
+          Status: {{friend.status.message}}
+        </div>
+        <div class="num-friends">
+          Friends: {{friend.friend_count}}
+        </div>
+      </li>
     </ul>
   </div>
 
@@ -62,6 +69,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
   <script src="app.js"></script>
+  <script src="friend-data.json" charset="utf-8"></script>
   <script src="FriendController.js"></script>
 </body>
 </html>
